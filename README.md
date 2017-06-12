@@ -33,7 +33,7 @@ class CustomThread extends Thread {
 		} catch (InterruptedException e) {
             e.printStackTrace();
         }
-	}
+    }
 }
 ```
 
