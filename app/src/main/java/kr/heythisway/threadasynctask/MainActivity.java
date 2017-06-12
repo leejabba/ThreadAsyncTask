@@ -7,6 +7,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
 
+import static kr.heythisway.threadasynctask.MainActivity.SET_DONE;
+
 /**
  *
  */
@@ -36,26 +38,33 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                run();
+                CustomThread thread = new CustomThread(handler);
+                thread.start();
             }
         });
     }
 
-    public void run() {
-        new Thread() {
-            public void run() {
-                try {
-                    // 10초 후에
-                    Thread.sleep(10000);
-                    handler.sendEmptyMessage(SET_DONE);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }.start();
-    }
 
     private void setDone() {
         textView.setText("Done!!!");
+    }
+}
+
+// CustomThread 클래스 정의
+class CustomThread extends Thread {
+    Handler handler;
+
+    CustomThread(Handler handler) {
+        this.handler = handler;
+    }
+
+    @Override
+    public void run() {
+        try {
+            Thread.sleep(5000);
+            handler.sendEmptyMessage(SET_DONE);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }
