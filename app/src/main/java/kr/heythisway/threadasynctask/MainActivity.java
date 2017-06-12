@@ -1,5 +1,6 @@
 package kr.heythisway.threadasynctask;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -9,12 +10,10 @@ import android.widget.TextView;
 
 import static kr.heythisway.threadasynctask.MainActivity.SET_DONE;
 
-/**
- *
- */
 public class MainActivity extends AppCompatActivity {
     TextView textView;
     public static final int SET_DONE = 1;
+    ProgressDialog progressDialong;
 
     // 핸들러
     Handler handler = new Handler() {
@@ -40,13 +39,21 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 CustomThread thread = new CustomThread(handler);
                 thread.start();
+                progressDialong.show();
             }
         });
+        // 화면에 진행상태 표시하는 프로그레스 다이얼로그의 속성을 정의
+        progressDialong = new ProgressDialog(this); // Context를 넘기는 부분에서 this를 넘겨야만 오류가 발생하지 않는다.
+        progressDialong.setTitle("진행중...");
+        progressDialong.setMessage("불러오는 중입니다.");
+        progressDialong.setProgressStyle(progressDialong.STYLE_SPINNER);
     }
 
 
     private void setDone() {
         textView.setText("Done!!!");
+        // 프로그레스 창을 해제
+        progressDialong.dismiss();
     }
 }
 
